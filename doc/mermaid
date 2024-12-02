@@ -1,0 +1,66 @@
+erDiagram
+    CLIENTS {
+        string id PK
+        string name
+        string email
+        string password
+        string address
+        string phone
+        datetime createdAt
+        datetime updatedAt
+    }
+    PRODUCTS {
+        string id PK
+        string title
+        string description
+        string[] genre
+        datetime releaseDate
+        number price
+        number stock
+        datetime createdAt
+        datetime updatedAt
+    }
+    ORDERS {
+        string id PK
+        string clientId FK
+        number total
+        string status
+        datetime orderDate
+        datetime updatedAt
+    }
+    ORDER_ITEMS {
+        string orderId FK
+        string productId FK
+        number quantity
+        number price
+    }
+    ADMINS {
+        string id PK
+        string username
+        string password
+        string role
+        datetime createdAt
+        datetime updatedAt
+    }
+    INVENTORY {
+        string id PK
+        string productId FK
+        number stockAdded
+        number stockRemoved
+        datetime date
+        string adminId FK
+    }
+    CHAT_HISTORY {
+        string id PK
+        string clientId FK
+        json messages
+        datetime createdAt
+    }
+
+    %% Relations
+    CLIENTS ||--o{ ORDERS : "places"
+    ORDERS ||--o{ ORDER_ITEMS : "contains"
+    PRODUCTS ||--o{ ORDER_ITEMS : "listed in"
+    PRODUCTS ||--o{ INVENTORY : "tracked by"
+    ADMINS ||--o{ INVENTORY : "manages"
+    CLIENTS ||--o{ CHAT_HISTORY : "has"
