@@ -2,4 +2,4 @@ package-lock.json
 node_modules
 
 .env
-db/dev.sqlite3
+dev.sqlite3
