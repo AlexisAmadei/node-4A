@@ -11,6 +11,7 @@ async function createTable() {
         const inventoryExist = await knex.schema.hasTable('inventory');
         const chatHistoryExist = await knex.schema.hasTable('chat_history');
 
+        console.log('# Creating tables...');
         if (!clientsExist) {
             await knex.schema.createTable('clients', (table) => {
                 table.string('id').primary();
@@ -22,6 +23,7 @@ async function createTable() {
                 table.datetime('createdAt');
                 table.datetime('updatedAt');
             });
+            console.log('# Clients table created');
         }
 
         if (!adminsExist) {
@@ -33,6 +35,7 @@ async function createTable() {
                 table.datetime('createdAt');
                 table.datetime('updatedAt');
             });
+            console.log('# Admins table created');
         }
 
         if (!ordersExist) {
@@ -44,6 +47,7 @@ async function createTable() {
                 table.datetime('orderDate');
                 table.datetime('updatedAt');
             });
+            console.log('# Orders table created');
         }
 
         if (!orderItemsExist) {
@@ -53,6 +57,7 @@ async function createTable() {
                 table.integer('quantity');
                 table.decimal('price');
             });
+            console.log('# Order Items table created');
         }
 
         if (!inventoryExist) {
@@ -64,6 +69,7 @@ async function createTable() {
                 table.datetime('date');
                 table.string('adminId').references('id').inTable('admins');
             });
+            console.log('# Inventory table created');
         }
 
         if (!chatHistoryExist) {
@@ -95,3 +101,4 @@ async function createTable() {
 }
 
 createTable();
+process.exit();
