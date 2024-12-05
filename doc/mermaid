@@ -5,7 +5,6 @@ erDiagram
         string email
         string password
         string address
-        string phone
         datetime createdAt
         datetime updatedAt
     }
