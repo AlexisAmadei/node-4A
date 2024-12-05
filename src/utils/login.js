@@ -5,11 +5,7 @@ const prompt = require('prompt-sync')({ sigint: true });
 
 async function askLogin() {
     console.log("Chatbot : Bienvenue ! Veuillez vous connecter.");
-
-    // Single prompt for both email and password
     let credentials = prompt("Entrez votre email et mot de passe (séparés par un espace) : ");
-
-    // Split the input into email and password
     let [email, password] = credentials.split(' ');
 
     if (!email || !password) {
@@ -18,17 +14,19 @@ async function askLogin() {
     }
 
     try {
-        let success = await userLogin(email, password); // Attempt login
+        let success = await userLogin(email, password);
         if (success) {
             console.log("Chatbot : Connexion réussie !");
+            return email;
         } else {
-            console.log("Chatbot : Email ou mot de passe incorrect. Réessayez s'il vous plait.");
+            console.log("Chatbot : Email ou mot de passe incorrect. Réessayez s'il vous plaît.");
             return askLogin();
         }
     } catch (error) {
         console.error("Erreur lors de la connexion :", error);
     }
 }
+
 
 async function askRegister() {
     console.log("Chatbot : Bienvenue ! Commençons par créer votre compte.");
