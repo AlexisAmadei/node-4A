@@ -21,6 +21,7 @@ chatbot.trainBatch([
     { input: "nouveau", output: "newUser" },
     { input: "je suis nouveau", output: "newUser" },
     { input: "nouvel utilisateur", output: "newUser" },
+    { input: "je n'ai pas de compte", output: "newUser" },
     { input: "j'ai déjà un compte", output: "oldUser" },
     { input: "existant", output: "oldUser" },
     { input: "je suis existant", output: "oldUser" },
@@ -32,6 +33,10 @@ chatbot.trainBatch([
 ]);
 
 function startChatbot() {
+    if (startChatbot.firstRun === undefined) {
+        console.clear();
+        startChatbot.firstRun = false;
+    }
     console.log("Chatbot : Bonjour et bienvenue !");
 
     let input = prompt("Êtes-vous un nouvel utilisateur ou déjà existant ? ").toLowerCase();

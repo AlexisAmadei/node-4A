@@ -1,23 +1,18 @@
 const md5 = require("md5");
 const { createUser, findUserByEmail } = require("../db/userModel");
-const { askLogin } = require('./login');
 
-async function createNewUser(name, email, pwd, address) {
-    if (!name || !email || !pwd || !address) {
-        throw new Error("Name, email, password, and address are required");
-    }
+async function createNewUser(name, email, password, address) {
     try {
         const existingUser = await findUserByEmail(email);
         if (existingUser) {
-            console.log("Email already in use. Please login.");
-            console.log('---------------------------');
-            askLogin();
+            console.log(`Chatbot : Un utilisateur avec l'email ${email} existe déjà.`);
             return;
         }
-        await createUser(name, email, md5(pwd), address);
-        console.log("User created successfully");
-    } catch (err) {
-        console.error("Error creating user:", err.message);
+        const hashedPassword = md5(password);
+        await createUser(name, email, hashedPassword, address);
+        console.log("Chatbot : Compte créé avec succès !");
+    } catch (error) {
+        console.error("Erreur lors de la création du compte :", error);
     }
 }
 

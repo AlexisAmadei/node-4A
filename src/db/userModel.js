@@ -1,23 +1,21 @@
 const knex = require('knex')(require('../../knexfile')['development']);
+const md5 = require('md5');
 
 async function findUserByEmail(email) {
     return knex('users').where({ email }).first();
 }
 
 async function createUser(name, email, password, address) {
-    if (!name || !email || !password) {
-        throw new Error('Name, email, and password are required');
-    }
-    const newUser = {
+    return await knex('users').insert({
         name,
         email,
-        password: password,
-        address: address,
+        password,
+        address,
         createdAt: new Date(),
         updatedAt: new Date()
-    };
-    return knex('users').insert(newUser);
+    });
 }
+
 
 async function findUserById(userId) {
     return knex('users').where({ id: userId }).first();
@@ -32,10 +30,20 @@ async function deleteUser(userId) {
     return knex('users').where({ id: userId }).delete();
 }
 
+async function userLogin(email, password) {
+    const user = await findUserByEmail(email);
+    if (!user) {
+        return false; // User not found
+    }
+    const hashedPassword = md5(password);
+    return user.password === hashedPassword;
+}
+
 module.exports = {
     createUser,
     findUserById,
     findUserByEmail,
     updateUser,
-    deleteUser
+    deleteUser,
+    userLogin
 };

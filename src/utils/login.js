@@ -1,22 +1,49 @@
+const { userLogin } = require('../db/userModel');
 const { createNewUser } = require('./createUser');
-const { askPassword, askAddress } = require('./verifyCredential');
-
+const { askPassword, askAddress, askName, askEmail } = require('./verifyCredential');
 const prompt = require('prompt-sync')({ sigint: true });
 
-function askLogin() {
-    console.log("Chatbot : Ravi de vous revoir ! Connectons-nous.");
-    const login = prompt("Renseignez votre email et mot de passe (séparés par un espace) : ");
-    const [email, password] = login.split(" ");
-    return { email, password };
+async function askLogin() {
+    console.log("Chatbot : Bienvenue ! Veuillez vous connecter.");
+
+    // Single prompt for both email and password
+    let credentials = prompt("Entrez votre email et mot de passe (séparés par un espace) : ");
+
+    // Split the input into email and password
+    let [email, password] = credentials.split(' ');
+
+    if (!email || !password) {
+        console.log("Chatbot : Veuillez fournir à la fois un email et un mot de passe.");
+        return askLogin();
+    }
+
+    try {
+        let success = await userLogin(email, password); // Attempt login
+        if (success) {
+            console.log("Chatbot : Connexion réussie !");
+        } else {
+            console.log("Chatbot : Email ou mot de passe incorrect. Réessayez s'il vous plait.");
+            return askLogin();
+        }
+    } catch (error) {
+        console.error("Erreur lors de la connexion :", error);
+    }
 }
 
-function askRegister() {
+async function askRegister() {
     console.log("Chatbot : Bienvenue ! Commençons par créer votre compte.");
     let name = askName();
     let email = askEmail();
     let password = askPassword();
     let address = askAddress();
-    createNewUser(name, email, password, address);
+    try {
+        await createNewUser(name, email, password, address);
+        console.log("Chatbot : Votre compte a été créé avec succès !");
+        console.log("Chatbot : Redirection vers la connexion...");
+        await askLogin();
+    } catch (error) {
+        console.error("Erreur lors de la création du compte :", error);
+    }
 }
 
 module.exports = { askLogin, askRegister };
