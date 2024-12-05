@@ -4,26 +4,24 @@ async function createTable() {
     try {
         // const authExist = await knex.schema.hasTable('auth');
         const adminsExist = await knex.schema.hasTable('admins');
-        const clientsExist = await knex.schema.hasTable('clients');
-        const movieExist = await knex.schema.hasTable('movies');
+        const usersExist = await knex.schema.hasTable('users');
+        const movieExist = await knex.schema.hasTable('movie');
         const ordersExist = await knex.schema.hasTable('orders');
         const orderItemsExist = await knex.schema.hasTable('order_items');
         const inventoryExist = await knex.schema.hasTable('inventory');
         const chatHistoryExist = await knex.schema.hasTable('chat_history');
 
         console.log('# Creating tables...');
-        if (!clientsExist) {
-            await knex.schema.createTable('clients', (table) => {
-                table.string('id').primary();
-                table.string('name');
-                table.string('email');
-                table.string('password');
+        if (!usersExist) {
+            await knex.schema.createTable('users', (table) => {
+                table.string('name').notNullable();
+                table.string('email').notNullable().unique();
+                table.string('password').notNullable();
                 table.string('address');
-                table.string('phone');
-                table.datetime('createdAt');
-                table.datetime('updatedAt');
+                table.timestamp('createdAt').defaultTo(knex.fn.now());
+                table.timestamp('updatedAt').defaultTo(knex.fn.now());
             });
-            console.log('# Clients table created');
+            console.log('# users table created');
         }
 
         if (!adminsExist) {
@@ -41,7 +39,7 @@ async function createTable() {
         if (!ordersExist) {
             await knex.schema.createTable('orders', (table) => {
                 table.string('id').primary();
-                table.string('clientId').references('id').inTable('clients');
+                table.string('clientId').references('id').inTable('users');
                 table.decimal('total');
                 table.string('status');
                 table.datetime('orderDate');
@@ -75,7 +73,7 @@ async function createTable() {
         if (!chatHistoryExist) {
             await knex.schema.createTable('chat_history', (table) => {
                 table.string('id').primary();
-                table.string('clientId').references('id').inTable('clients');
+                table.string('clientId').references('id').inTable('users');
                 table.json('messages');
                 table.datetime('createdAt');
             });
@@ -100,5 +98,10 @@ async function createTable() {
     }
 }
 
-createTable();
-process.exit();
+createTable().then(() => {
+    console.log('Tables created successfully');
+    process.exit(0);
+}).catch((err) => {
+    console.error('Error creating tables:', err);
+    process.exit(1);
+});
