@@ -1,6 +1,4 @@
 const limdu = require('limdu');
-const { createNewUser } = require('./utils/user');
-const { askEmail, askPassword, askName, askAddress } = require('./utils/verifyCredential');
 const { askLogin, askRegister } = require('./utils/login');
 const prompt = require('prompt-sync')({ sigint: true });
 

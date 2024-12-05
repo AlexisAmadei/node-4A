@@ -1,4 +1,4 @@
-const { createNewUser } = require('./user');
+const { createNewUser } = require('./createUser');
 const { askPassword, askAddress } = require('./verifyCredential');
 
 const prompt = require('prompt-sync')({ sigint: true });

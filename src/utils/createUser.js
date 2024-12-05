@@ -1,6 +1,6 @@
 const md5 = require("md5");
 const { createUser, findUserByEmail } = require("../db/userModel");
-const { askLogin } = require('../utils/login');
+const { askLogin } = require('./login');
 
 async function createNewUser(name, email, pwd, address) {
     if (!name || !email || !pwd || !address) {
