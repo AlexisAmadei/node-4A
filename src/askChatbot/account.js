@@ -2,6 +2,7 @@ const { userLogin } = require('../db/userModel');
 const { createNewUser } = require('../utils/user');
 const { verifyEmail, verifyPassword } = require('../utils/verifyCredential');
 const prompt = require('prompt-sync')({ sigint: true });
+const { createAuthEntry } = require('../db/authModel');
 
 function askEmail() {
     let email = prompt("Veuillez entrer votre email : ");
@@ -40,28 +41,38 @@ function askAddress() {
 }
 
 async function askLogin() {
-    console.log("Chatbot : Bienvenue ! Veuillez vous connecter.");
-    let credentials = prompt("Entrez votre email et mot de passe (séparés par un espace) : ");
-    let [email, password] = credentials.split(' ');
+    console.log("Chatbot : Bienvenue ! Veuillez vous connecter.".green);
 
-    if (!email || !password) {
-        console.log("Chatbot : Veuillez fournir à la fois un email et un mot de passe.");
-        return askLogin();
-    }
-
-    try {
-        let success = await userLogin(email, password);
-        if (success) {
-            console.log("Chatbot : Connexion réussie !");
-            return email;
-        } else {
-            console.log("Chatbot : Email ou mot de passe incorrect. Réessayez s'il vous plaît.");
-            return askLogin();
+    while (true) {
+        const credentials = prompt("Entrez votre email et mot de passe (séparés par un espace) ou tapez 'quit' pour quitter : ".blue);
+        if (credentials.toLowerCase() === "quit") {
+            console.log("Chatbot : Déconnexion. À bientôt !".yellow);
+            return null;
         }
-    } catch (error) {
-        console.error("Erreur lors de la connexion :", error);
+
+        const [email, password] = credentials.split(' ');
+
+        if (!email || !password) {
+            console.log("Chatbot : Veuillez fournir à la fois un email et un mot de passe.".red);
+            continue;
+        }
+
+        try {
+            const user = await userLogin(email, password);
+            if (!user) {
+                console.log("Chatbot : Email ou mot de passe incorrect. Réessayez s'il vous plaît.".red);
+                continue;
+            }
+            const auth = await createAuthEntry(user.id, user.email);
+            console.log("Chatbot : Connexion réussie !".green);
+            return user.email;
+            return user;
+        } catch (error) {
+            console.error("Erreur lors de la connexion :", error.message.red);
+        }
     }
 }
+
 
 async function askRegister() {
     console.log("Chatbot : Bienvenue ! Commençons par créer votre compte.");
