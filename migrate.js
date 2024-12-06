@@ -2,14 +2,10 @@ const knex = require('knex')(require('./knexfile')['development']);
 
 async function createTable() {
     try {
-        // const authExist = await knex.schema.hasTable('auth');
         const adminsExist = await knex.schema.hasTable('admins');
         const usersExist = await knex.schema.hasTable('users');
-        const movieExist = await knex.schema.hasTable('movie');
         const ordersExist = await knex.schema.hasTable('orders');
         const orderItemsExist = await knex.schema.hasTable('order_items');
-        const inventoryExist = await knex.schema.hasTable('inventory');
-        const chatHistoryExist = await knex.schema.hasTable('chat_history');
 
         console.log('# Creating tables...');
         if (!usersExist) {
@@ -17,7 +13,7 @@ async function createTable() {
                 table.string('name').notNullable();
                 table.string('email').notNullable().unique();
                 table.string('password').notNullable();
-                table.string('address');
+                table.string('address').nullable();
                 table.timestamp('createdAt').defaultTo(knex.fn.now());
                 table.timestamp('updatedAt').defaultTo(knex.fn.now());
             });
@@ -29,7 +25,6 @@ async function createTable() {
                 table.string('id').primary();
                 table.string('username');
                 table.string('password');
-                table.string('role');
                 table.datetime('createdAt');
                 table.datetime('updatedAt');
             });
@@ -57,42 +52,6 @@ async function createTable() {
             });
             console.log('# Order Items table created');
         }
-
-        if (!inventoryExist) {
-            await knex.schema.createTable('inventory', (table) => {
-                table.string('id').primary();
-                table.string('movieId').references('id').inTable('movie');
-                table.integer('stockAdded');
-                table.integer('stockRemoved');
-                table.datetime('date');
-                table.string('adminId').references('id').inTable('admins');
-            });
-            console.log('# Inventory table created');
-        }
-
-        if (!chatHistoryExist) {
-            await knex.schema.createTable('chat_history', (table) => {
-                table.string('id').primary();
-                table.string('clientId').references('id').inTable('users');
-                table.json('messages');
-                table.datetime('createdAt');
-            });
-        }
-
-        if (!movieExist) {
-            await knex.schema.createTable('movie', (table) => {
-                table.string('id').primary();
-                table.string('title');
-                table.string('description');
-                table.specificType('genre', 'text[]');
-                table.datetime('releaseDate');
-                table.decimal('price');
-                table.integer('stock');
-                table.datetime('createdAt');
-                table.datetime('updatedAt');
-            });
-        }
-
     } catch (error) {
         console.error("Error creating tables:", error);
     }
