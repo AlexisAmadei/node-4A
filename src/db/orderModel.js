@@ -32,3 +32,14 @@ async function getOrderbyId(orderId) {
         throw error;
     }
 }
+
+async function getAllOrders() {
+    return knex('orders').select('*');
+}
+
+module.exports = {
+    getAllOrders,
+    createOrder,
+    createOrderItems,
+    getOrderbyId,
+};

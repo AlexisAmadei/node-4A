@@ -16,7 +16,6 @@ async function createUser(name, email, password, address) {
     });
 }
 
-
 async function findUserById(userId) {
     return knex('users').where({ id: userId }).first();
 }
@@ -39,11 +38,16 @@ async function userLogin(email, password) {
     return user.password === hashedPassword;
 }
 
+async function getAllUsers() {
+    return knex('users').select('*');
+}
+
 module.exports = {
     createUser,
     findUserById,
     findUserByEmail,
     updateUser,
     deleteUser,
-    userLogin
+    userLogin,
+    getAllUsers
 };

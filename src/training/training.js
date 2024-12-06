@@ -21,14 +21,29 @@ chatbot.trainBatch([
     { input: "je suis nouveau", output: "newUser" },
     { input: "nouvel utilisateur", output: "newUser" },
     { input: "je n'ai pas de compte", output: "newUser" },
+    { input: "créer un compte", output: "newUser" },
+    { input: "inscription", output: "newUser" },
+
     { input: "j'ai déjà un compte", output: "oldUser" },
     { input: "existant", output: "oldUser" },
     { input: "je suis existant", output: "oldUser" },
     { input: "déjà existant", output: "oldUser" },
+    { input: "connexion", output: "oldUser" },
+    { input: "se connecter", output: "oldUser" },
+
+    { input: 'je suis admin', output: 'admin' },
+    { input: 'admin', output: 'admin' },
+    { input: 'je suis un administrateur', output: 'admin' },
+    { input: 'administrateur', output: 'admin' },
+    { input: 'gestionnaire', output: 'admin' },
+    { input: 'modérateur', output: 'admin' },
+
     { input: "exit", output: "exit" },
     { input: "quitter", output: "exit" },
     { input: "au revoir", output: "exit" },
-    { input: "bye", output: "exit" }
+    { input: "bye", output: "exit" },
+    { input: "sortir", output: "exit" },
+    { input: "fermer", output: "exit" },
 ]);
 
 
