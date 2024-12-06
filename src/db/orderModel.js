@@ -1,8 +1,8 @@
 const knex = require('knex')(require('../../knexfile')['development']);
 
-async function createOrder(id, clientMail, total, status) {
+async function createOrder(orderId, clientMail, total, status) {
     return await knex('orders').insert({
-        id,
+        id: orderId,
         clientMail,
         total,
         status,
@@ -32,3 +32,5 @@ async function getOrderbyId(orderId) {
         throw error;
     }
 }
+
+module.exports = { createOrder, createOrderItems, getOrderbyId };
