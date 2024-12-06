@@ -39,7 +39,7 @@ async function createTable() {
         if (!ordersExist) {
             await knex.schema.createTable('orders', (table) => {
                 table.string('id').primary();
-                table.string('clientId').references('id').inTable('users');
+                table.string('clientMail').references('id').inTable('users');
                 table.decimal('total');
                 table.string('status');
                 table.datetime('orderDate');
