@@ -110,8 +110,44 @@ selectMovie.trainBatch([
     { input: "cinquième film", output: "movie5" },
 ]);
 
+var interMenu = new limdu.classifiers.EnhancedClassifier({
+    classifierType: TextClassifier,
+    featureExtractor: WordExtractor
+});
+interMenu.trainBatch([
+    { input: "je veux ajouter un autre film", output: "restart" },
+    { input: "ajouter un autre film", output: "restart" },
+    { input: "un autre film", output: "restart" },
+    { input: "ajouter film", output: "restart" },
+    { input: "rajouter un film", output: "restart" },
+    { input: "choisir un autre film", output: "restart" },
+    { input: "continuer à ajouter", output: "restart" },
+
+    { input: "je veux voir mon panier", output: "cart" },
+    { input: "voir mon panier", output: "cart" },
+    { input: "mon panier", output: "cart" },
+    { input: "afficher le panier", output: "cart" },
+    { input: "qu'est-ce qu'il y a dans mon panier ?", output: "cart" },
+    { input: "contenu du panier", output: "cart" },
+
+    { input: "je veux annuler", output: "cancel" },
+    { input: "annuler", output: "cancel" },
+    { input: "stopper l'opération", output: "cancel" },
+    { input: "revenir en arrière", output: "cancel" },
+    { input: "stop", output: "cancel" },
+    { input: "annuler la sélection", output: "cancel" },
+
+    { input: "je veux quitter", output: "exit" },
+    { input: "quitter", output: "exit" },
+    { input: "sortir", output: "exit" },
+    { input: "terminer", output: "exit" },
+    { input: "fermer", output: "exit" },
+    { input: "exit", output: "exit" },
+]);
+
 module.exports = {
     chatbot,
     movieGenre,
-    selectMovie
+    selectMovie,
+    interMenu
 };

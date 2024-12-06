@@ -1,6 +1,6 @@
 const { getMovieGenre, searchMovieByGenre } = require("../api/movie");
 const { addItemToCart } = require("../global/userCart");
-const { movieGenre, selectMovie } = require("../training/training");
+const { movieGenre, selectMovie, interMenu } = require("../training/training");
 const prompt = require("prompt-sync")({ sigint: true });
 const colors = require("colors");
 
@@ -51,7 +51,7 @@ async function askGenre() {
         await askSpecificMovie(movies.results);
     } else {
         console.log("Désolé, je n'ai pas compris ce genre. Veuillez réessayer.".red);
-        await askGenre(); // Recursive call if genre is invalid
+        await askGenre();
     }
 }
 
@@ -72,8 +72,23 @@ async function getGenreAndSearchMovies() {
 
 async function chatbotFlow(name) {
     console.log(`\nBonjour ${name} !`.green.bold);
-    await getGenreAndSearchMovies();
-    console.log("Chatbot : Au revoir !".blue);
+    while (true) {
+        await getGenreAndSearchMovies();
+        const response = prompt("Que voulez-vous faire maintenant ?".blue);
+        const predicted_response = interMenu.classify(response);
+
+        if (predicted_response[0] === 'restart') {
+            // console.log("D'accord, revenons au début.".green);
+        } else if (predicted_response[0] === 'cart') {
+            // cart
+        } else if (predicted_response[0] === 'cancel') {
+            // annuler le dernier ajout
+        } else if (predicted_response[0] === 'exit') {
+            // se déconnecter
+        } else {
+            console.log("Désolé, je n'ai pas compris votre choix. Veuillez réessayer.".red);
+        }
+    }
 }
 
 module.exports = { chatbotFlow };
