@@ -66,9 +66,37 @@ movieGenre.trainBatch([
     { input: "thriller", output: "thriller" },
     { input: "war", output: "war" },
     { input: "western", output: "western" },
-])
+]);
+
+var selectMovie = new limdu.classifiers.EnhancedClassifier({
+    classifierType: TextClassifier,
+    featureExtractor: WordExtractor
+});
+selectMovie.trainBatch([
+    { input: "le premier", output: "movie1" },
+    { input: "numéro un", output: "movie1" },
+    { input: "le 1", output: "movie1" },
+    { input: "premier film", output: "movie1" },
+    { input: "le deuxième", output: "movie2" },
+    { input: "numéro deux", output: "movie2" },
+    { input: "le 2", output: "movie2" },
+    { input: "deuxième film", output: "movie2" },
+    { input: "le troisième", output: "movie3" },
+    { input: "numéro trois", output: "movie3" },
+    { input: "le 3", output: "movie3" },
+    { input: "troisième film", output: "movie3" },
+    { input: "le quatrième", output: "movie4" },
+    { input: "numéro quatre", output: "movie4" },
+    { input: "le 4", output: "movie4" },
+    { input: "quatrième film", output: "movie4" },
+    { input: "le cinquième", output: "movie5" },
+    { input: "numéro cinq", output: "movie5" },
+    { input: "le 5", output: "movie5" },
+    { input: "cinquième film", output: "movie5" },
+]);
 
 module.exports = {
     chatbot,
-    movieGenre
+    movieGenre,
+    selectMovie
 };
