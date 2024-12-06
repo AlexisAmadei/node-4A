@@ -66,7 +66,6 @@ async function askLogin() {
             const auth = await createAuthEntry(user.id, user.email);
             console.log("Chatbot : Connexion réussie !".green);
             return user.email;
-            return user;
         } catch (error) {
             console.error("Erreur lors de la connexion :", error.message.red);
         }
