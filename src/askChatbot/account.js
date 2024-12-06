@@ -1,6 +1,6 @@
 const { userLogin } = require('../db/userModel');
 const { createNewUser } = require('../utils/createUser');
-const { verifyEmail } = require('../utils/verifyCredential');
+const { verifyEmail, verifyPassword } = require('../utils/verifyCredential');
 const prompt = require('prompt-sync')({ sigint: true });
 
 function askEmail() {
@@ -72,8 +72,8 @@ async function askRegister() {
     try {
         await createNewUser(name, email, password, address);
         console.log("Chatbot : Votre compte a été créé avec succès !");
-        console.log("Chatbot : Redirection vers la connexion...");
-        await askLogin();
+        console.log("Chatbot : Redirection vers le menu principal...");
+        return;
     } catch (error) {
         console.error("Erreur lors de la création du compte :", error);
     }
