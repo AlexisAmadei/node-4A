@@ -21,7 +21,7 @@ erDiagram
     }
     ORDERS {
         string id PK
-        string clientId FK
+        string clientMail FK
         number total
         string status
         datetime orderDate
