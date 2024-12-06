@@ -1,5 +1,6 @@
 const { getMovieGenre, searchMovieByGenre } = require("../api/movie");
 const { addItemToCart } = require("../global/userCart");
+const { askCart } = require("./cart")
 const { movieGenre, selectMovie, interMenu } = require("../training/training");
 const prompt = require("prompt-sync")({ sigint: true });
 const colors = require("colors");
@@ -81,6 +82,7 @@ async function chatbotFlow(name) {
             // console.log("D'accord, revenons au début.".green);
         } else if (predicted_response[0] === 'cart') {
             // cart
+            await askCart();
         } else if (predicted_response[0] === 'cancel') {
             // annuler le dernier ajout
         } else if (predicted_response[0] === 'exit') {
