@@ -1,5 +1,5 @@
 const { userLogin } = require('../db/userModel');
-const { createNewUser } = require('../utils/createUser');
+const { createNewUser } = require('../utils/user');
 const { verifyEmail, verifyPassword } = require('../utils/verifyCredential');
 const prompt = require('prompt-sync')({ sigint: true });
 
