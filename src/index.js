@@ -1,38 +1,11 @@
-const limdu = require('limdu');
 const colors = require('colors');
 const prompt = require('prompt-sync')({ sigint: true });
 
-const { askLogin, askRegister } = require('./utils/login');
+const { askLogin, askRegister } = require('./askChatbot/account');
+const { chatbotFlow } = require('./askChatbot/flow');
+const { chatbot } = require('./training/training');
 
-var TextClassifier = limdu.classifiers.multilabel.BinaryRelevance.bind(0, {
-    binaryClassifierType: limdu.classifiers.Winnow.bind(0, { retrain_count: 10 })
-});
 
-var WordExtractor = function (input, features) {
-    input.split(" ").forEach(function (word) {
-        features[word] = 1;
-    });
-};
-
-var chatbot = new limdu.classifiers.EnhancedClassifier({
-    classifierType: TextClassifier,
-    featureExtractor: WordExtractor
-});
-
-chatbot.trainBatch([
-    { input: "nouveau", output: "newUser" },
-    { input: "je suis nouveau", output: "newUser" },
-    { input: "nouvel utilisateur", output: "newUser" },
-    { input: "je n'ai pas de compte", output: "newUser" },
-    { input: "j'ai déjà un compte", output: "oldUser" },
-    { input: "existant", output: "oldUser" },
-    { input: "je suis existant", output: "oldUser" },
-    { input: "déjà existant", output: "oldUser" },
-    { input: "exit", output: "exit" },
-    { input: "quitter", output: "exit" },
-    { input: "au revoir", output: "exit" },
-    { input: "bye", output: "exit" }
-]);
 
 async function startChatbot() {
     var userConnected = {
@@ -67,14 +40,8 @@ async function startChatbot() {
         } else {
             console.log(`Chatbot : Vous êtes déjà connecté en tant que ${userConnected.email}.`.green);
             console.log("-------------------------".cyan);
-            console.log("Chatbot : Que puis-je faire pour vous ?".green);
-            // let continueInput = prompt("Voulez-vous continuer ou quitter ? (continuer/quitter) ").toLowerCase();
-            // if (continueInput === "quitter") {
-            //     console.log("Chatbot : Déconnexion réussie. Au revoir !".blue);
-            //     return;
-            // } else {
-            //     console.log("Chatbot : Reprenons là où vous vous êtes arrêté.".cyan);
-            // }
+            await chatbotFlow(userConnected.email);
+            return;
         }
     }
 }
