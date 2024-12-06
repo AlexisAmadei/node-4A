@@ -4,8 +4,7 @@ const prompt = require('prompt-sync')({ sigint: true });
 const { askLogin, askRegister } = require('./askChatbot/account');
 const { chatbotFlow } = require('./askChatbot/flow');
 const { chatbot } = require('./training/training');
-
-
+const { adminFlow } = require('./admin/flow');
 
 async function startChatbot() {
     var userConnected = {
@@ -31,6 +30,9 @@ async function startChatbot() {
                 await askRegister();
             } else if (predicted_response[0] === "oldUser") {
                 userConnected.email = await askLogin();
+            } else if (predicted_response[0] === "admin") {
+                await adminFlow();
+                return;
             } else if (predicted_response[0] === "exit") {
                 console.log("Chatbot : Au revoir !".blue);
                 return;
