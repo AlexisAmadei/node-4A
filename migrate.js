@@ -6,10 +6,13 @@ async function createTable() {
         const usersExist = await knex.schema.hasTable('users');
         const ordersExist = await knex.schema.hasTable('orders');
         const orderItemsExist = await knex.schema.hasTable('order_items');
+        const authExist = await knex.schema.hasTable('auth');
 
         console.log('# Creating tables...');
+
         if (!usersExist) {
             await knex.schema.createTable('users', (table) => {
+                table.increments('id').primary();
                 table.string('name').notNullable();
                 table.string('email').notNullable().unique();
                 table.string('password').notNullable();
@@ -35,7 +38,7 @@ async function createTable() {
         if (!ordersExist) {
             await knex.schema.createTable('orders', (table) => {
                 table.string('id').primary();
-                table.string('clientMail').references('id').inTable('users');
+                table.string('clientMail').references('email').inTable('users'); // Reference the email field
                 table.decimal('total');
                 table.string('status');
                 table.datetime('orderDate');
@@ -52,6 +55,15 @@ async function createTable() {
                 table.decimal('price');
             });
             console.log('# Order Items table created');
+        }
+
+        if (!authExist) {
+            await knex.schema.createTable('auth', (table) => {
+                table.increments('id').primary();
+                table.string('email').notNullable();
+                table.timestamp('createdAt').defaultTo(knex.fn.now());
+            });
+            console.log('# Auth table created');
         }
     } catch (error) {
         console.error("Error creating tables:", error);

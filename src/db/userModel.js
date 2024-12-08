@@ -35,7 +35,15 @@ async function userLogin(email, password) {
         return false; // User not found
     }
     const hashedPassword = md5(password);
-    return user.password === hashedPassword;
+    if (user.password !== hashedPassword) {
+        return false;
+    } else {
+        await knex('auth').insert({
+            email,
+            createdAt: new Date()
+        });
+    }
+    return { id: user.id, email: user.email };
 }
 
 async function getAllUsers() {

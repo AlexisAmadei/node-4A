@@ -93,7 +93,7 @@ async function chatbotFlow(name) {
         } else if (predicted_response[0] === 'cancel') {
             // annuler le dernier ajout
         } else if (predicted_response[0] === 'exit') {
-            // se déconnecter
+            
         } else {
             console.log("Désolé, je n'ai pas compris votre choix. Veuillez réessayer.".red);
         }

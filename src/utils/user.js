@@ -16,4 +16,10 @@ async function createNewUser(name, email, password, address) {
     }
 }
 
-module.exports = { createNewUser };
+async function listUsers() {
+    const users = await getAllUsers();
+    console.log("users :", users);
+    // return users;
+}
+
+module.exports = { createNewUser, listUsers };
