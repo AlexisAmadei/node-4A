@@ -203,6 +203,16 @@ interMenu.trainBatch([
     { input: "terminer", output: "exit" },
     { input: "fermer", output: "exit" },
     { input: "exit", output: "exit" },
+
+    { input: "aide", output: "help" },
+    { input: "aider", output: "help" },
+    { input: "besoin d'aide", output: "help" },
+    { input: "je suis perdu", output: "help" },
+    { input: "je ne sais pas quoi faire", output: "help" },
+    { input: "je ne comprends pas", output: "help" },
+    { input: "je suis bloqué", output: "help" },
+    { input: "je suis coincé", output: "help" },
+    { input: "je suis dans une impasse", output: "help" },
 ]);
 
 module.exports = {
