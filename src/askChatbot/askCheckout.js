@@ -2,6 +2,20 @@ const prompt = require('prompt-sync')({ sigint: true });
 const colors = require('colors');
 const { emptyCart, getCart } = require('../global/userCart');
 
+async function askCreditCard() {
+    console.log('🔒 Veuillez entrer les informations de votre carte de crédit :'.green);
+    const creditCard = prompt('Numéro de carte : '.blue);
+    if (creditCard === 'skip')
+        return { creditCard: 'skip', cvv: 'skip', expiryDate: 'skip', cardHolder: 'skip' };
+    const cvv = prompt('Code CVV : '.blue);
+    const expiryDate = prompt('Date d\'expiration (MM/YY) : '.blue);
+    const cardHolder = prompt('Nom du titulaire de la carte : '.blue);
+    console.log('🔒 Vérification des informations de la carte de crédit...'.green);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    console.log('🔒 Informations de carte de crédit vérifiées.'.green);
+    return { creditCard, cvv, expiryDate, cardHolder };
+}
+
 /**
  * Displays the cart and handles the checkout process.
  * @param {Array} cart - The user's cart containing movie items.
@@ -25,11 +39,14 @@ async function askCheckout() {
     const confirmation = prompt("Confirmez-vous votre achat ? (oui/non) : ".blue).toLowerCase();
 
     if (confirmation === 'oui') {
-        console.log("\n✅ Paiement confirmé. Merci pour votre achat !".green.bold);
+        const { creditCard, cvv, expiryDate, cardHolder } = await askCreditCard();
+        console.log('🔒 Paiement en cours...'.green);
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        console.log('🔒 Paiement effectué avec succès.'.green);
         emptyCart();
-        console.log("Votre panier a été vidé.\n".yellow);
+        console.log('🎉 Merci pour votre achat !'.green);
     } else {
-        console.log("\n🛑 Paiement annulé. Vous pouvez revenir plus tard.".red);
+        console.log('🚫 Paiement annulé.'.red);
     }
 }
 

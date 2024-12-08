@@ -26,13 +26,12 @@ async function startChatbot() {
             let input = prompt("-> Êtes-vous un nouvel utilisateur ou déjà existant ? ").toLowerCase();
             let predicted_response = chatbot.classify(input);
 
-            if (predicted_response[0] === "newUser")
+            if (predicted_response[0] === "newUser") {
                 await askRegister();
-
-            if (predicted_response[0] === "oldUser")
+                continue;
+            } else if(predicted_response[0] === "oldUser") {
                 userConnected.email = await askLogin();
-
-            if (predicted_response[0] === "admin") {
+            } else if (predicted_response[0] === "admin") {
                 const adminReturn = await adminFlow();
                 if (adminReturn === 'userMode') {
                     continue;
@@ -40,12 +39,12 @@ async function startChatbot() {
                     console.log("Chatbot : Au revoir !".blue);
                     break;
                 }
-            }
-            if (predicted_response[0] === "exit") {
+            } else if (predicted_response[0] === "exit") {
                 console.log("Chatbot : Au revoir !".blue);
                 return;
             } else {
-                console.log("Chatbot : Je n'ai pas bien compris. Veuillez répondre par 'nouveau' ou 'existant'.".yellow);
+                console.log("Chatbot : Je n'ai pas compris votre réponse. Veuillez réessayer.".red);
+                continue;
             }
         } else {
             console.log(`Chatbot : Vous êtes déjà connecté en tant que ${userConnected.email}.`.green);
