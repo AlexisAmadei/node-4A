@@ -54,7 +54,7 @@ async function startChatbot() {
         } else {
             console.log(`Chatbot : Vous êtes déjà connecté en tant que ${userConnected.email}.`.green);
             console.log("-------------------------".cyan);
-            const chatBot = await chatbotFlow(userConnected.email);
+            const chatBot = await chatbotFlow(userConnected.name, userConnected.email);
             if (chatBot === false)
                 process.exit();
         }

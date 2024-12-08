@@ -1,6 +1,6 @@
 const { getMovieGenre, searchMovieByGenre } = require("../api/movie");
-const { addItemToCart, displayCart, getCart, emptyCart } = require("../global/userCart");
-const { askCart } = require("./cart")
+const { addItemToCart } = require("../global/userCart");
+const { askCart } = require("./askCart")
 const { movieGenre, selectMovie, interMenu } = require("../training/training");
 const prompt = require("prompt-sync")({ sigint: true });
 const colors = require("colors");
@@ -87,7 +87,7 @@ async function getGenreAndSearchMovies() {
  * The main flow of the chatbot.
  * @param {string} name - The user's name.
  * */
-async function chatbotFlow(name) {
+async function chatbotFlow(name, clientMail) {
     console.log(`\nBonjour ${name} !`.green.bold);
     await getGenreAndSearchMovies();
     while (true) {
@@ -106,7 +106,7 @@ async function chatbotFlow(name) {
                 await askCart();
             }
             if (action === 'checkout') {
-                await askCheckout();
+                await askCheckout(clientMail);
             }
         } else if (predicted_response[0] === 'cancel') {
             console.log("D'accord, annulons l'opération.".yellow);

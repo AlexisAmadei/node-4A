@@ -1,5 +1,5 @@
 const { emptyCart, removeItemFromCart, displayCart } = require('../global/userCart.js');
-const { chatbot_cart } = require("../training/cart");
+const { chatbot_cart } = require("../training/cart.js");
 const prompt = require("prompt-sync")({ sigint: true });
 
 /**

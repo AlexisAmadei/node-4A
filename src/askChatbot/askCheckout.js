@@ -1,6 +1,8 @@
 const prompt = require('prompt-sync')({ sigint: true });
 const colors = require('colors');
 const { emptyCart, getCart } = require('../global/userCart');
+const { createOrder, updateOrderStatus } = require('../db/orderModel');
+const { createNewOrder } = require('../utils/createOrder');
 
 async function askCreditCard() {
     console.log('🔒 Veuillez entrer les informations de votre carte de crédit :'.green);
@@ -20,7 +22,7 @@ async function askCreditCard() {
  * Displays the cart and handles the checkout process.
  * @param {Array} cart - The user's cart containing movie items.
  */
-async function askCheckout() {
+async function askCheckout(clientMail) {
     console.log("\n🛒 Processus de paiement en cours...\n".yellow.bold);
     const cart = getCart();
     if (cart.length === 0) {
@@ -39,12 +41,19 @@ async function askCheckout() {
     const confirmation = prompt("Confirmez-vous votre achat ? (oui/non) : ".blue).toLowerCase();
 
     if (confirmation === 'oui') {
-        const { creditCard, cvv, expiryDate, cardHolder } = await askCreditCard();
-        console.log('🔒 Paiement en cours...'.green);
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        console.log('🔒 Paiement effectué avec succès.'.green);
-        emptyCart();
-        console.log('🎉 Merci pour votre achat !'.green);
+        const orderId = await createNewOrder(cart, clientMail);
+        if (orderId) {
+            const { creditCard, cvv, expiryDate, cardHolder } = await askCreditCard();
+            console.log('🔒 Paiement en cours...'.green);
+            console.log('🔒 Paiement effectué avec succès.'.green);
+
+            // Empty the cart after successful payment
+            emptyCart();
+            console.log('🎉 Merci pour votre achat !'.green);
+
+            // Update order status to 'paid'
+            await updateOrderStatus(orderId, 'paid');
+        }
     } else {
         console.log('🚫 Paiement annulé.'.red);
     }
