@@ -21,6 +21,7 @@ chatbot_admin.trainBatch([
     { input: "voir tous les utilisateurs", output: "listUsers" },
     { input: "liste des utilisateurs", output: "listUsers" },
     { input: "afficher les utilisateurs", output: "listUsers" },
+    { input: "utilisateur", output: "listUsers" },
     { input: "utilisateurs", output: "listUsers" },
 
     // List Orders
