@@ -38,13 +38,20 @@ chatbot_cart.trainBatch([
     { input: "supprimer un objet", output: "remove" },
     { input: "enlever un produit du panier", output: "remove" },
     { input: "retirer un article", output: "remove" },
-    { input: "je veux enlever cet objet", output: "remove" }
+    { input: "je veux enlever cet objet", output: "remove" },
 
     // Checkout cart
-    // { input: "payer", output: "checkout" },
-    // { input: "finaliser la commande", output: "checkout" },
-    // { input: "je veux payer", output: "checkout" },
-    // { input: "valider mon panier", output: "checkout" }
+    { input: "payer", output: "checkout" },
+    { input: "finaliser la commande", output: "checkout" },
+    { input: "je veux payer", output: "checkout" },
+    { input: "valider mon panier", output: "checkout" },
+
+    // return to main menu
+    { input: "retour", output: "restart" },
+    { input: "revenir en arrière", output: "restart" },
+    { input: "menu principal", output: "restart" },
+    { input: "recommencer", output: "restart" },
+    { input: "rien", output: "restart" }
 ]);
 
 module.exports = { chatbot_cart };

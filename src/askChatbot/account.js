@@ -4,6 +4,9 @@ const { verifyEmail, verifyPassword } = require('../utils/verifyCredential');
 const prompt = require('prompt-sync')({ sigint: true });
 const { createAuthEntry } = require('../db/authModel');
 
+/**
+ * Asks the user to provide an email address.
+ */
 function askEmail() {
     let email = prompt("Veuillez entrer votre email : ");
     if (!verifyEmail(email)) {
@@ -13,6 +16,10 @@ function askEmail() {
     return email;
 }
 
+/**
+ * Asks the user to provide a password.
+ * @returns {string} The password provided by the user.
+*/
 function askPassword() {
     let password = prompt("Veuillez entrer votre mot de passe : ");
     if (!verifyPassword(password)) {
@@ -22,6 +29,10 @@ function askPassword() {
     return password;
 }
 
+/**
+ * Asks the user to provide a name.
+ * @returns {string} The name provided by the user.
+ */
 function askName() {
     let name = prompt("Veuillez entrer votre nom : ");
     if (!name) {
@@ -31,6 +42,10 @@ function askName() {
     return name;
 }
 
+/**
+ * Asks the user to provide an address.
+ * @returns {string} The address provided by the user.
+*/
 function askAddress() {
     let address = prompt("Veuillez entrer votre adresse : ");
     if (!address) {
@@ -40,6 +55,11 @@ function askAddress() {
     return address;
 }
 
+/**
+ * Asks the user to login.
+ * @returns {string} The email of the user.
+ * @returns {null} If the user wants to quit
+*/
 async function askLogin() {
     console.log("Chatbot : Bienvenue ! Veuillez vous connecter.".green);
 
@@ -72,7 +92,10 @@ async function askLogin() {
     }
 }
 
-
+/**
+ * Asks the user to register.
+ * @returns {Promise} A promise that resolves when the user is registered.
+ */
 async function askRegister() {
     console.log("Chatbot : Bienvenue ! Commençons par créer votre compte.");
     let name = askName();

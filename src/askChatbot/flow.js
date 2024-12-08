@@ -1,10 +1,15 @@
 const { getMovieGenre, searchMovieByGenre } = require("../api/movie");
-const { addItemToCart, displayCart } = require("../global/userCart");
+const { addItemToCart, displayCart, getCart, emptyCart } = require("../global/userCart");
 const { askCart } = require("./cart")
 const { movieGenre, selectMovie, interMenu } = require("../training/training");
 const prompt = require("prompt-sync")({ sigint: true });
 const colors = require("colors");
+const { askCheckout } = require("./askCheckout");
 
+/**
+ * Asks the user to select a specific movie from a list of movies.
+ * @param {Array} movies - The list of movies to choose from.
+*/
 async function askSpecificMovie(movies) {
     const input = prompt("Quel film vous intéresse ? ".blue);
     const predicted_response = selectMovie.classify(input);
@@ -13,7 +18,7 @@ async function askSpecificMovie(movies) {
         const movieIndex = parseInt(predicted_response[0].replace("movie", "")) - 1;
 
         if (movies[movieIndex]) {
-            addItemToCart(movies[movieIndex].id, movies[movieIndex].title);
+            addItemToCart(movies[movieIndex].id, movies[movieIndex].title, 9.99);
         } else {
             console.log("Désolé, je n'ai pas compris votre choix. Veuillez réessayer.".red);
             await askSpecificMovie(movies);
@@ -24,6 +29,12 @@ async function askSpecificMovie(movies) {
     }
 }
 
+/**
+ * Asks the user to select a genre and displays a list of movies from that genre.
+ * Then, asks the user to select a specific movie from the list.
+ * Finally, adds the selected movie to the cart.
+ * @returns {Promise<void>}
+ * */
 async function askGenre() {
     const input = prompt("Quel genre de film vous intéresse ? ".blue);
     const predicted_response = movieGenre.classify(input);
@@ -56,6 +67,11 @@ async function askGenre() {
     }
 }
 
+/**
+ * Displays the cart and handles the checkout process.
+ * @param {Array} cart - The user's cart containing movie items.
+ * @param {Function} clearCart - A function to clear the cart after checkout.
+ * */
 async function getGenreAndSearchMovies() {
     try {
         const genres = await getMovieGenre();
@@ -71,6 +87,10 @@ async function getGenreAndSearchMovies() {
     }
 }
 
+/**
+ * The main flow of the chatbot.
+ * @param {string} name - The user's name.
+ * */
 async function chatbotFlow(name) {
     console.log(`\nBonjour ${name} !`.green.bold);
     while (true) {
@@ -82,18 +102,20 @@ async function chatbotFlow(name) {
             // console.log("D'accord, revenons au début.".green);
         } else if (predicted_response[0] === 'cart') {
             const action = await askCart();
-            if (action === 'add' || action === 'empty')
+            if (action === 'add' || action === 'empty' || action === 'restart')
                 continue;
             if (action === 'removeItem') {
                 await askCart();
             }
             if (action === 'checkout') {
-                // checkout cart
+                await askCheckout();
             }
         } else if (predicted_response[0] === 'cancel') {
-            // annuler le dernier ajout
+            console.log("D'accord, annulons l'opération.".yellow);
+
         } else if (predicted_response[0] === 'exit') {
-            
+            console.log("Au revoir !".blue);
+            break;
         } else {
             console.log("Désolé, je n'ai pas compris votre choix. Veuillez réessayer.".red);
         }

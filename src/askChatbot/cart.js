@@ -1,9 +1,12 @@
-const { addItemToCart, emptyCart, getCart, removeItemFromCart, displayCart } = require('../global/userCart.js');
+const { emptyCart, removeItemFromCart, displayCart } = require('../global/userCart.js');
 const { chatbot_cart } = require("../training/cart");
 const prompt = require("prompt-sync")({ sigint: true });
 
+/**
+ * Asks the user about their cart and handles the cart operations.
+ * @returns {String} The operation to perform on the cart.
+ */
 async function askCart() {
-
     displayCart();
     const input = prompt("Que souhaitez-vous faire avec votre panier ? ".blue);
     const predicted_response = chatbot_cart.classify(input);
@@ -22,18 +25,22 @@ async function askCart() {
 
             case "remove":
                 const itemToRemove = prompt("Quel article voulez-vous retirer du panier ? ".red);
-                removeItemFromCart(itemToRemove);
+                removeItemFromCart(parseInt(itemToRemove));
                 return 'removeItem';
 
             case "checkout":
                 return 'checkout';
+
+            case "restart":
+                return 'restart';
+
             default:
                 console.log("Désolé, je n'ai pas compris votre demande. Veuillez réessayer.".red);
-                break;
+                askCart();
         }
     } else {
         console.log("Désolé, je n'ai pas compris votre demande. Veuillez réessayer.".red);
-        await askCart();
+        askCart();
     }
 }
 
