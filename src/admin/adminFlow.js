@@ -60,17 +60,21 @@ async function adminFlow(skip) {
 
         if (!predicted_response.length) {
             console.log("Chatbot : Désolé, je n'ai pas compris votre demande. Veuillez réessayer.".red);
-            continue; // Stay in the loop if no valid prediction
+            continue;
         }
 
         switch (predicted_response[0]) {
             case 'listUsers': {
                 const users = await getAllUsers();
+                if (users.length === 0) {
+                    console.log("Chatbot : Aucun utilisateur trouvé.".yellow);
+                    break;
+                }
                 console.log("\nListe des utilisateurs :");
                 users.forEach(user => {
                     console.log(`- ${user.name} (${user.email})`);
                 });
-                break; // Stay in the loop after listing users
+                break;
             }
             case 'deleteUser': {
                 const email = prompt("Entrez l'email de l'utilisateur à supprimer : ");
@@ -80,7 +84,7 @@ async function adminFlow(skip) {
                 } else {
                     console.log("Chatbot : Utilisateur non trouvé.".red);
                 }
-                break; // Stay in the loop after deleting a user
+                break;
             }
             case 'listOrders': {
                 const orders = await getAllOrders();
@@ -92,7 +96,7 @@ async function adminFlow(skip) {
                         console.log(`- Commande ${order.id} (${order.clientMail}) : ${order.total}€`);
                     });
                 }
-                break; // Stay in the loop after listing orders
+                break;
             }
             case 'deleteOrder': {
                 const orderId = prompt("Entrez l'ID de la commande à supprimer : ");
@@ -102,15 +106,15 @@ async function adminFlow(skip) {
                 } else {
                     console.log("Chatbot : Commande non trouvée.".red);
                 }
-                break; // Stay in the loop after deleting an order
+                break;
             }
             case 'userMode': {
                 console.log("Chatbot : Redirection vers l'interface utilisateur...".cyan);
-                return 'userMode'; // Exit admin flow and switch to user mode
+                return 'userMode';
             }
             case 'exit': {
                 console.log("Chatbot : Déconnexion. À bientôt !".yellow);
-                return 'exit'; // Exit admin flow entirely
+                return 'exit';
             }
             default: {
                 console.log("Chatbot : Désolé, je n'ai pas compris votre demande. Veuillez réessayer.".red);
