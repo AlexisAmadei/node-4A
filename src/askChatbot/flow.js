@@ -5,6 +5,7 @@ const { movieGenre, selectMovie, interMenu } = require("../training/training");
 const prompt = require("prompt-sync")({ sigint: true });
 const colors = require("colors");
 const { askCheckout } = require("./askCheckout");
+const { logout } = require("../utils/logout");
 
 /**
  * Asks the user to select a specific movie from a list of movies.
@@ -111,8 +112,11 @@ async function chatbotFlow(name) {
             console.log("D'accord, annulons l'opération.".yellow);
 
         } else if (predicted_response[0] === 'exit') {
-            console.log("Au revoir !".blue);
-            return false;
+            const res = await logout();
+            if (res) {
+                console.log("Chatbot : Au revoir !".blue);
+                return false;
+            }
         } else {
             console.log("Désolé, je n'ai pas compris votre choix. Veuillez réessayer.".red);
             console.log("Essayer 'help' si vous êtes perdu (ça arrive).".red);

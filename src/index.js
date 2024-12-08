@@ -5,6 +5,7 @@ const { askLogin, askRegister } = require('./askChatbot/account');
 const { chatbotFlow } = require('./askChatbot/flow');
 const { chatbot } = require('./training/training');
 const { adminFlow } = require('./admin/adminFlow');
+const { logout } = require('./utils/logout');
 
 async function startChatbot() {
     var userConnected = {
@@ -40,8 +41,12 @@ async function startChatbot() {
                     break;
                 }
             } else if (predicted_response[0] === "exit") {
-                console.log("Chatbot : Au revoir !".blue);
-                return;
+                const res = await logout(userConnected.email);
+                if (res) {
+                    console.log("Chatbot : Au revoir !".blue);
+                    break;
+                } else
+                    return;
             } else {
                 console.log("Chatbot : Je n'ai pas compris votre réponse. Veuillez réessayer.".red);
                 continue;
