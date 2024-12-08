@@ -25,7 +25,7 @@ async function createTable() {
 
         if (!adminsExist) {
             await knex.schema.createTable('admins', (table) => {
-                table.string('id').primary();
+                table.increments('id').primary();
                 table.string('name');
                 table.string('email');
                 table.string('password');

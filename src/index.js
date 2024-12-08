@@ -4,7 +4,7 @@ const prompt = require('prompt-sync')({ sigint: true });
 const { askLogin, askRegister } = require('./askChatbot/account');
 const { chatbotFlow } = require('./askChatbot/flow');
 const { chatbot } = require('./training/training');
-const { adminFlow } = require('./admin/flow');
+const { adminFlow } = require('./admin/adminFlow');
 
 async function startChatbot() {
     var userConnected = {
@@ -26,14 +26,22 @@ async function startChatbot() {
             let input = prompt("-> Êtes-vous un nouvel utilisateur ou déjà existant ? ").toLowerCase();
             let predicted_response = chatbot.classify(input);
 
-            if (predicted_response[0] === "newUser") {
+            if (predicted_response[0] === "newUser")
                 await askRegister();
-            } else if (predicted_response[0] === "oldUser") {
+
+            if (predicted_response[0] === "oldUser")
                 userConnected.email = await askLogin();
-            } else if (predicted_response[0] === "admin") {
-                await adminFlow();
-                return;
-            } else if (predicted_response[0] === "exit") {
+
+            if (predicted_response[0] === "admin") {
+                const adminReturn = await adminFlow();
+                if (adminReturn === 'userMode') {
+                    continue;
+                } else if (adminReturn === 'exit') {
+                    console.log("Chatbot : Au revoir !".blue);
+                    break;
+                }
+            }
+            if (predicted_response[0] === "exit") {
                 console.log("Chatbot : Au revoir !".blue);
                 return;
             } else {

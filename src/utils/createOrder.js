@@ -1,6 +1,5 @@
 const md5 = require("md5");
 const { createOrder, createOrderItems } = require("../db/orderModel");
-const knex = require("knex")(require("../../knexfile")["development"]);
 
 async function createNewOrder(movieId, clientMail) {
     try {

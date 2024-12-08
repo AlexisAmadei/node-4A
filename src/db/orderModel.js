@@ -37,9 +37,16 @@ async function getAllOrders() {
     return knex('orders').select('*');
 }
 
+async function deleteOrder(orderId) {
+    return await knex('orders')
+        .where({ id: orderId })
+        .del();
+}
+
 module.exports = {
     getAllOrders,
     createOrder,
     createOrderItems,
     getOrderbyId,
+    deleteOrder,
 };
