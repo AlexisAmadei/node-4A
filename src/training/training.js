@@ -81,6 +81,13 @@ movieGenre.trainBatch([
     { input: "thriller", output: "thriller" },
     { input: "war", output: "war" },
     { input: "western", output: "western" },
+    { input: "rien", output: "exit" },
+    { input: "sortir", output: "exit" },
+    { input: "quitter", output: "exit" },
+    { input: "exit", output: "exit" },
+    { input: "au revoir", output: "exit" },
+    { input: "bye", output: "exit" },
+    { input: "fermer", output: "exit" },
 ]);
 
 var selectMovie = new limdu.classifiers.EnhancedClassifier({
@@ -189,6 +196,10 @@ interMenu.trainBatch([
     { input: "afficher le panier", output: "cart" },
     { input: "qu'est-ce qu'il y a dans mon panier ?", output: "cart" },
     { input: "contenu du panier", output: "cart" },
+    { input: "payer", output: "cart" },
+    { input: "passer à la caisse", output: "cart" },
+    { input: "caisse", output: "cart" },
+    { input: "checkout", output: "cart" },
 
     { input: "je veux annuler", output: "cancel" },
     { input: "annuler", output: "cancel" },

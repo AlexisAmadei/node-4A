@@ -67,11 +67,6 @@ async function askGenre() {
     }
 }
 
-/**
- * Displays the cart and handles the checkout process.
- * @param {Array} cart - The user's cart containing movie items.
- * @param {Function} clearCart - A function to clear the cart after checkout.
- * */
 async function getGenreAndSearchMovies() {
     try {
         const genres = await getMovieGenre();
@@ -93,13 +88,15 @@ async function getGenreAndSearchMovies() {
  * */
 async function chatbotFlow(name) {
     console.log(`\nBonjour ${name} !`.green.bold);
+    await getGenreAndSearchMovies();
     while (true) {
-        await getGenreAndSearchMovies();
-        const response = prompt("Que voulez-vous faire maintenant ?".blue);
+        console.log("\nQue voulez-vous faire maintenant ?".blue);
+        const response = prompt("> ");
         const predicted_response = interMenu.classify(response);
 
         if (predicted_response[0] === 'restart') {
-            // console.log("D'accord, revenons au début.".green);
+            console.log("D'accord, revenons au début.".green);
+            await chatbotFlow(name);
         } else if (predicted_response[0] === 'cart') {
             const action = await askCart();
             if (action === 'add' || action === 'empty' || action === 'restart')
@@ -115,9 +112,10 @@ async function chatbotFlow(name) {
 
         } else if (predicted_response[0] === 'exit') {
             console.log("Au revoir !".blue);
-            break;
+            return false;
         } else {
             console.log("Désolé, je n'ai pas compris votre choix. Veuillez réessayer.".red);
+            console.log("Essayer 'help' si vous êtes perdu (ça arrive).".red);
         }
     }
 }
