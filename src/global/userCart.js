@@ -30,9 +30,26 @@ function getCart() {
     return userCart.items;
 }
 
+function displayCart() {
+    const cart = getCart();
+    console.log("\n🛒 Voici les articles dans votre panier :\n".yellow.bold);
+
+    if (cart.length === 0) {
+        console.log("Votre panier est vide.".red);
+    } else {
+        cart.forEach((item, index) => {
+            console.log(
+                `${(index + 1).toString().cyan}. 🎥 ${item.movieName.green} (ID: ${item.movieId.toString().blue})`
+            );
+        });
+    }
+    console.log("\n");
+}
+
+
 function emptyCart() {
     userCart.items = [];
     console.log("🛒 Votre panier est maintenant vide.".blue);
 }
 
-module.exports = { addItemToCart, removeItemFromCart, getCart, emptyCart };
+module.exports = { addItemToCart, removeItemFromCart, getCart, emptyCart, displayCart };

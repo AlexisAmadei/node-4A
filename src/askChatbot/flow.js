@@ -1,5 +1,5 @@
 const { getMovieGenre, searchMovieByGenre } = require("../api/movie");
-const { addItemToCart } = require("../global/userCart");
+const { addItemToCart, displayCart } = require("../global/userCart");
 const { askCart } = require("./cart")
 const { movieGenre, selectMovie, interMenu } = require("../training/training");
 const prompt = require("prompt-sync")({ sigint: true });
@@ -81,8 +81,15 @@ async function chatbotFlow(name) {
         if (predicted_response[0] === 'restart') {
             // console.log("D'accord, revenons au début.".green);
         } else if (predicted_response[0] === 'cart') {
-            // cart
-            await askCart();
+            const action = await askCart();
+            if (action === 'add' || action === 'empty')
+                continue;
+            if (action === 'removeItem') {
+                await askCart();
+            }
+            if (action === 'checkout') {
+                // checkout cart
+            }
         } else if (predicted_response[0] === 'cancel') {
             // annuler le dernier ajout
         } else if (predicted_response[0] === 'exit') {

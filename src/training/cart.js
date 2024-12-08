@@ -39,6 +39,12 @@ chatbot_cart.trainBatch([
     { input: "enlever un produit du panier", output: "remove" },
     { input: "retirer un article", output: "remove" },
     { input: "je veux enlever cet objet", output: "remove" }
+
+    // Checkout cart
+    // { input: "payer", output: "checkout" },
+    // { input: "finaliser la commande", output: "checkout" },
+    // { input: "je veux payer", output: "checkout" },
+    // { input: "valider mon panier", output: "checkout" }
 ]);
 
 module.exports = { chatbot_cart };
